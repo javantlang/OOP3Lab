@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
     }
     virtual void getName()
     {
-        cout << "Node\n";
+        cout << "Node";
     }
 };
 
@@ -84,8 +85,8 @@ class List {
 public:
     List() {
         cout << "constructor List\n";
-        current = NULL;
         root = NULL;
+        current = root;
         tail = root;
     }
     int getCount() { return count; };
@@ -95,6 +96,8 @@ public:
     void next() { current = current->next; }
     void prev() { current = current->prev; }
     void Clear();
+    int getPos(Node*);
+    Node* getNodePos(int);
     Node* getObject() { return current; }
     bool eol() { return current == NULL; }
     template <class T>
@@ -105,6 +108,30 @@ public:
     Node* Add(T*, Node*);
     Node* Delete(Node*);
 };
+
+int List::getPos(Node* node)
+{
+    Node* posNode = root;
+    int pos = 0;
+    while (posNode != node)
+    {
+        posNode = posNode->next;
+        ++pos;
+    }
+    return pos;
+}
+
+Node* List::getNodePos(int n)
+{
+    if (n > count) return NULL;
+    current = root;
+    while (n != 0)
+    {
+        current = current->next;
+        --n;
+    }
+    return current;
+}
 
 template <class T>
 Node* List::Add(T* point)
@@ -134,6 +161,7 @@ Node* List::Add(T* point)
 template <class T>
 Node* List::Add(T* point, Node* curPos)
 {
+    cout << "Добавление на позицию " << getPos(curPos) + 1 << "\n";
     Node* newObj = point;
     Node* nextNode;
     count++;
@@ -150,6 +178,7 @@ Node* List::Add(T* point, Node* curPos)
 
 Node* List::Delete(Node* node)
 {
+    cout << "Delete Node "; node->getName();
     count--;
     Node* prevNode;
     Node* nextNode;
@@ -188,7 +217,58 @@ void List::Clear()
     root = NULL;
 }
 
+void randActions(int n, List* actionList)
+{
+    cout << "\nRANDOM ACTIONS\n";
+    while (n != 0)
+    {
+        int x = rand();
+        int amount = actionList->getCount();
+        if (x % 5 == 0)
+            actionList->Add(new Point2D, actionList->getNodePos(rand() % amount));
+        if (x % 5 == 1)
+            actionList->Add(new Point3D, actionList->getNodePos(rand() % amount));
+        if (x % 5 == 2)
+            actionList->Add(new Point4D, actionList->getNodePos(rand() % amount));
+        if (x % 5 == 3)
+            actionList->Delete(actionList->getNodePos(rand() % amount));
+        if (x % 5 == 4)
+            actionList->getNodePos(rand() % amount)->getName();
+        --n;
+    }
+}
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    setlocale(0, "");
+    srand(time(0));
+    List* list = new List;
+    for (int i = 0; i < 6; ++i)
+    {
+        int x = rand();
+        if (x % 3 == 0)
+            list->Add(new Point2D);
+        if (x % 3 == 1)
+            list->Add(new Point3D);
+        if (x % 3 == 2)
+            list->Add(new Point4D);
+    }
+    cout << "Вывод с конца до начала списка\n";
+    for (list->last(); !list->eol(); list->prev())
+    {
+        list->getObject()->getName();
+    }
+    cout << "\nВывод с начала до конца списка\n";
+    for (list->first(); !list->eol(); list->next())
+    {
+        list->getObject()->getName();
+    }
+    randActions(10000, list);
+    cout << "\nВывод с начала до конца списка\n";
+    for (list->first(); !list->eol(); list->next())
+    {
+        list->getObject()->getName();
+    }
+    list->Clear();
+    return 0;
 }
