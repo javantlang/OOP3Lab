@@ -120,6 +120,20 @@ Node* List::Delete(Node* node)
         return root;
 }
 
+void List::Clear()
+{
+    Node* delRoot = root;
+    if (delRoot == NULL) return;
+    do
+    {
+        Node* delNode = delRoot;
+        delRoot = delRoot->next;
+        delete delNode;
+    } while (delRoot != NULL);
+    count = 0;
+    root = NULL;
+}
+
 int main()
 {
     std::cout << "Hello World!\n";
