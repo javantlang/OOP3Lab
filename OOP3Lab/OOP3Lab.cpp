@@ -6,15 +6,69 @@ class Node {
 public:
     Node* next;
     Node* prev;
+    friend class List;
     Node()
     {
         prev = NULL;
         next = NULL;
     }
-    friend class List;
     virtual void getName()
     {
         cout << "Node\n";
+    }
+};
+
+class Point2D : public Node {
+public:
+    int x;
+    int y;
+    Point2D()
+    {
+        cout << "Constructor Point2D\n";
+        x = 0;
+        y = 0;
+    }
+    void getName()
+    {
+        cout << "getName(Point2D)\n";
+    }
+};
+
+class Point3D : public Node {
+public:
+    int x;
+    int y;
+    int z;
+    Point3D()
+    {
+        std::cout << "Constructor Point3D\n";
+        x = 0;
+        y = 0;
+        z = 0;
+    }
+    void getName()
+    {
+        cout << "getName(Point3D)\n";
+    }
+};
+
+class Point4D : public Node {
+public:
+    int x;
+    int y;
+    int z;
+    int l;
+    Point4D()
+    {
+        std::cout << "Constructor Point4D\n";
+        x = 0;
+        y = 0;
+        z = 0;
+        l = 0;
+    }
+    void getName()
+    {
+        cout << "getName(Point4D)\n";
     }
 };
 
