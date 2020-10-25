@@ -94,6 +94,32 @@ Node* List::Add(T* point, Node* curPos)
     return newObj;
 }
 
+Node* List::Delete(Node* node)
+{
+    count--;
+    Node* prevNode;
+    Node* nextNode;
+    prevNode = node->prev;
+    nextNode = node->next;
+    if (prevNode != NULL)
+        prevNode->next = node->next;
+    else
+        //Присваивание корню следующий, после удаляемого, элемент
+        root = nextNode;
+    if (nextNode != NULL)
+        nextNode->prev = node->prev;
+    else
+        //Присваивание конца предыдущего для удаляемого элемента
+        tail = prevNode;
+    delete node;
+    //Возвращение предыдущего элемента
+    if (prevNode != NULL)
+        return prevNode;
+    else
+        //Возвращение корня, если предыдущего нет
+        return root;
+}
+
 int main()
 {
     std::cout << "Hello World!\n";
