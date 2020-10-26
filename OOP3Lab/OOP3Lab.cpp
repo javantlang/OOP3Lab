@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <time.h>
+#include <ctime>
 
 using namespace std;
 
@@ -17,6 +18,12 @@ public:
     {
         cout << "Node";
     }
+    virtual ~Node()
+    {
+        cout << "Destructor Node\n";
+        this->next = NULL;
+        this->prev = NULL;
+    }
 };
 
 class Point2D : public Node {
@@ -32,6 +39,10 @@ public:
     void getName()
     {
         cout << "getName(Point2D)\n";
+    }
+    ~Point2D()
+    {
+        cout << "Destructor Point2D\n";
     }
 };
 
@@ -50,6 +61,10 @@ public:
     void getName()
     {
         cout << "getName(Point3D)\n";
+    }
+    ~Point3D()
+    {
+        cout << "Destructor Point3D\n";
     }
 };
 
@@ -70,6 +85,10 @@ public:
     void getName()
     {
         cout << "getName(Point4D)\n";
+    }
+    ~Point4D()
+    {
+        cout << "Destructor Point4D\n";
     }
 };
 
@@ -231,9 +250,11 @@ void randActions(int n, List* actionList)
         if (x % 5 == 2)
             actionList->Add(new Point4D, actionList->getNodePos(rand() % amount));
         if (x % 5 == 3)
-            actionList->Delete(actionList->getNodePos(rand() % amount));
+            if (!actionList->isEmpty())
+                actionList->Delete(actionList->getNodePos(rand() % amount));
         if (x % 5 == 4)
-            actionList->getNodePos(rand() % amount)->getName();
+            if (!actionList->isEmpty())
+                actionList->getNodePos(rand() % amount)->getName();
         --n;
     }
 }
@@ -263,12 +284,13 @@ int main()
     {
         list->getObject()->getName();
     }
-    randActions(10000, list);
+    randActions(12, list);
     cout << "\nВывод с начала до конца списка\n";
     for (list->first(); !list->eol(); list->next())
     {
         list->getObject()->getName();
     }
     list->Clear();
+    cout << "Время работы программы " << clock()/1000.0 << " секунды";
     return 0;
 }
